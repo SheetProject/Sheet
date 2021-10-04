@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/sheet/.sheet" ]; then
+	SHEETD_DEFAULT_DATADIR="/var/lib/sheet/.sheet"
+else
+	SHEETD_DEFAULT_DATADIR="/var/lib/sheetd"
+fi
+
+SHEETD_CONFIGFILE=${SHEETD_CONFIGFILE:-/etc/sheet/sheet.conf}
+SHEETD_PIDDIR=${SHEETD_PIDDIR:-/var/run/sheetd}
+SHEETD_PIDFILE=${SHEETD_PIDFILE:-${SHEETD_PIDDIR}/sheetd.pid}
+SHEETD_DATADIR=${SHEETD_DATADIR:-${SHEETD_DEFAULT_DATADIR}}
+SHEETD_USER=${SHEETD_USER:-${SHEET_USER:-sheet}}
+SHEETD_GROUP=${SHEETD_GROUP:-sheet}
+SHEETD_BIN=${SHEETD_BIN:-/usr/bin/sheetd}
+SHEETD_NICE=${SHEETD_NICE:-${NICELEVEL:-0}}
+SHEETD_OPTS="${SHEETD_OPTS:-${SHEET_OPTS}}"
+
+name="Sheet Core Daemon"
+description="Sheet cryptocurrency P2P network daemon"
+
+command="/usr/bin/sheetd"
+command_args="-pid=\"${SHEETD_PIDFILE}\" \
+		-conf=\"${SHEETD_CONFIGFILE}\" \
+		-datadir=\"${SHEETD_DATADIR}\" \
+		-daemon \
+		${SHEETD_OPTS}"
+
+required_files="${SHEETD_CONFIGFILE}"
+start_stop_daemon_args="-u ${SHEETD_USER} \
+			-N ${SHEETD_NICE} -w 2000"
+pidfile="${SHEETD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${SHEETD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${SHEETD_USER}:${SHEETD_GROUP}" \
+	"${SHEETD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${SHEETD_USER}:${SHEETD_GROUP}" \
+	"${SHEETD_PIDDIR}"
+
+	checkpath -f \
+	-o ${SHEETD_USER}:${SHEETD_GROUP} \
+	-m 0660 \
+	${SHEETD_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${SHEETD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run sheetd."
+		eerror "The setting must appear in ${SHEETD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Sheet Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

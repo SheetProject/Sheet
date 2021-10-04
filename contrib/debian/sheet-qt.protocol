@@ -1,0 +1,11 @@
+[Protocol]
+exec=sheet-qt '%u'
+protocol=sheet
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false

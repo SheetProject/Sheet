@@ -1,0 +1,81 @@
+policy_module(sheet, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type sheet_t;
+type sheet_exec_t;
+init_daemon_domain(sheet_t, sheet_exec_t)
+
+permissive sheet_t;
+
+type sheet_initrc_exec_t;
+init_script_file(sheet_initrc_exec_t)
+
+type sheet_conf_t;
+files_type(sheet_conf_t)
+
+type sheet_var_lib_t;
+files_type(sheet_var_lib_t)
+
+type sheet_var_run_t;
+files_type(sheet_var_run_t)
+
+type sheet_port_t;
+corenet_port(sheet_port_t)
+
+########################################
+#
+# sheet local policy
+#
+allow sheet_t self:process { fork };
+
+allow sheet_t self:fifo_file rw_fifo_file_perms;
+allow sheet_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(sheet_t, sheet_conf_t, sheet_conf_t)
+manage_files_pattern(sheet_t, sheet_conf_t, sheet_conf_t)
+
+manage_dirs_pattern(sheet_t, sheet_var_lib_t, sheet_var_lib_t)
+manage_files_pattern(sheet_t, sheet_var_lib_t, sheet_var_lib_t)
+files_var_lib_filetrans(sheet_t, sheet_var_lib_t, { dir file })
+
+manage_dirs_pattern(sheet_t, sheet_var_run_t, sheet_var_run_t)
+manage_files_pattern(sheet_t, sheet_var_run_t, sheet_var_run_t)
+
+sysnet_dns_name_resolve(sheet_t)
+corenet_all_recvfrom_unlabeled(sheet_t)
+
+allow sheet_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(sheet_t)
+corenet_tcp_sendrecv_generic_node(sheet_t)
+corenet_tcp_sendrecv_all_ports(sheet_t)
+corenet_tcp_bind_generic_node(sheet_t)
+
+gen_require(`
+    type sheet_port_t;
+')
+allow sheet_t sheet_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type sheet_port_t;
+')
+allow sheet_t sheet_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(sheet_t)
+
+files_read_etc_files(sheet_t)
+
+miscfiles_read_localization(sheet_t)
+
+sysnet_dns_name_resolve(sheet_t)
+
+allow sheet_t sheet_exec_t:file execute_no_trans;
+allow sheet_t self:process setsched;
+corecmd_exec_ls(sheet_t)
+corenet_tcp_connect_http_port(sheet_t)
+dev_read_urand(sheet_t)
+fs_getattr_xattr_fs(sheet_t)
+kernel_read_system_state(sheet_t)

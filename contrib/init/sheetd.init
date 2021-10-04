@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  sheetd The sheet core server.
+#
+#
+# chkconfig: 345 80 20
+# description: sheetd
+# processname: sheetd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/sheetd, see below
+if [ -f /etc/sysconfig/sheetd ]; then
+        . /etc/sysconfig/sheetd
+fi
+
+RETVAL=0
+
+prog=sheetd
+# you can override the lockfile via SHEETD_LOCKFILE in /etc/sysconfig/sheetd
+lockfile=${SHEETD_LOCKFILE-/var/lock/subsys/sheetd}
+
+# sheetd defaults to /usr/bin/sheetd, override with SHEETD_BIN
+sheetd=${SHEETD_BIN-/usr/bin/sheetd}
+
+# sheetd opts default to -disablewallet, override with SHEETD_OPTS
+sheetd_opts=${SHEETD_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $sheetd $sheetd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

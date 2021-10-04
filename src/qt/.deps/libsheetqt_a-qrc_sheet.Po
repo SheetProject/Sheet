@@ -1,0 +1,3 @@
+qt/libsheetqt_a-qrc_sheet.o: qt/qrc_sheet.cpp /usr/include/stdc-predef.h
+
+/usr/include/stdc-predef.h:

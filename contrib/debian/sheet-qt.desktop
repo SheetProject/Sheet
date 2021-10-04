@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sheet Core
+Comment=Connect to the Sheet P2P Network
+Comment[de]=Verbinde mit dem Sheet peer-to-peer Netzwerk
+Comment[fr]=Sheet, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Sheet, eşten eşe kriptografik sanal para birimi
+Exec=sheet-qt %u
+Terminal=false
+Type=Application
+Icon=sheet128
+MimeType=x-scheme-handler/sheet;
+Categories=Office;Finance;

@@ -1,0 +1,6 @@
+usr/local/bin/sheet-qt usr/bin
+share/pixmaps/sheet32.xpm usr/share/pixmaps
+share/pixmaps/sheet16.xpm usr/share/pixmaps
+share/pixmaps/sheet128.png usr/share/pixmaps
+debian/sheet-qt.desktop usr/share/applications
+debian/sheet-qt.protocol usr/share/kde4/services/

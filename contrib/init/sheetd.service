@@ -1,0 +1,22 @@
+[Unit]
+Description=Sheet's distributed currency daemon
+After=network.target
+
+[Service]
+User=sheet
+Group=sheet
+
+Type=forking
+PIDFile=/var/lib/sheetd/sheetd.pid
+ExecStart=/usr/bin/sheetd -daemon -pid=/var/lib/sheetd/sheetd.pid \
+-conf=/etc/sheet/sheet.conf -datadir=/var/lib/sheetd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

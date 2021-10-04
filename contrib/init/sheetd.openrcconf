@@ -1,0 +1,33 @@
+# /etc/conf.d/sheetd: config file for /etc/init.d/sheetd
+
+# Config file location
+#SHEETD_CONFIGFILE="/etc/sheet/sheet.conf"
+
+# What directory to write pidfile to?  (created and owned by $SHEETD_USER)
+#SHEETD_PIDDIR="/var/run/sheetd"
+
+# What filename to give the pidfile
+#SHEETD_PIDFILE="${SHEETD_PIDDIR}/sheetd.pid"
+
+# Where to write sheetd data (be mindful that the blockchain is large)
+#SHEETD_DATADIR="/var/lib/sheetd"
+
+# User and group to own sheetd process
+#SHEETD_USER="sheet"
+#SHEETD_GROUP="sheet"
+
+# Path to sheetd executable
+#SHEETD_BIN="/usr/bin/sheetd"
+
+# Nice value to run sheetd under
+#SHEETD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#SHEETD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for sheetd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+SHEETD_SIGTERM_TIMEOUT=60

@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Sheet Core consensus library
+Description: Library for the Sheet consensus protocol.
+Version: 1.0.0
+Libs: -L${libdir} -lsheetconsensus
+Cflags: -I${includedir}
+Requires.private: libcrypto

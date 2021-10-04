@@ -1,0 +1,4 @@
+qt/libsheetqt_a-qrc_sheet_locale.o: qt/qrc_sheet_locale.cpp \
+ /usr/include/stdc-predef.h
+
+/usr/include/stdc-predef.h:

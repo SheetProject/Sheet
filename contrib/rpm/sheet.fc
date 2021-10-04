@@ -1,0 +1,8 @@
+/usr/bin/sheet-cli		--	gen_context(system_u:object_r:sheet_exec_t,s0)
+/usr/sbin/sheetd		--	gen_context(system_u:object_r:sheet_exec_t,s0)
+/usr/lib(64)?/sheet/sheetd		--	gen_context(system_u:object_r:sheet_exec_t,s0)
+
+/etc/sheet(/.*)?		gen_context(system_u:object_r:sheet_conf_t,s0)
+/var/lib/sheet(/.*)?		gen_context(system_u:object_r:sheet_var_lib_t,s0)
+
+(/var)?/run/sheetd(/.*)?   gen_context(system_u:object_r:sheet_var_run_t,s0)
