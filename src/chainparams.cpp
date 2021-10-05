@@ -156,8 +156,8 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_COINBASE_ASSETS].nOverrideRuleChangeActivationThreshold = 1411;
         consensus.vDeployments[Consensus::DEPLOYMENT_COINBASE_ASSETS].nOverrideMinerConfirmationWindow = 2016;
 
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000001000100");
-        consensus.defaultAssumeValid = uint256S("0x000000220f2f100b4a68af5fa2aa7177d7e989292ee9db57daac4da9bf6f848d");
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000a17ab845ed2e");
+        consensus.defaultAssumeValid = uint256S("0x000000000263747bc47d4d18016a4d52e36d7e7bf37ccd4a106881f18d0a668c");
 
         pchMessageStart[0] = 0x53;
         pchMessageStart[1] = 0x48;
@@ -191,13 +191,18 @@ public:
 
         checkpointData = (CCheckpointData) {
             {
-                { 0, uint256S("0x000000220f2f100b4a68af5fa2aa7177d7e989292ee9db57daac4da9bf6f848d")}
+                { 0, uint256S("0x000000220f2f100b4a68af5fa2aa7177d7e989292ee9db57daac4da9bf6f848d")},
+                { 100, uint256S("0x00000005404e3aa577d73289f0aed075acbcec94ccaa2b90e1d84a3223d1af37")},
+                { 200, uint256S("0x00000001799ee448153bb208560469cd0cadd2b85d8d7e0ce6eb7df0a3288f86")},
+                { 500, uint256S("0x0000000002369f91bc6630c408e318360717787484b6e347276d25f637ceefe9")},
+                { 1000, uint256S("0x0000000007c836805ef4abf000f01068f9043c31830423efe54fec47089b65a2")}.
+                { 1500, uint256S("0x000000000263747bc47d4d18016a4d52e36d7e7bf37ccd4a106881f18d0a668c")}
             }
         };
 
         chainTxData = ChainTxData{
-            0,
-            0,
+            1633435933,
+            3322,
             0
         };
 
